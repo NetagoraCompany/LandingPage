@@ -1,3 +1,103 @@
-<main>
-    Este es el hero de la pagina
-</main>
+<section class="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-white via-purple-50/30 to-white overflow-hidden">
+	<!-- Elementos decorativos de fondo -->
+	<div class="absolute inset-0 overflow-hidden">
+		<div class="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+		<div class="absolute top-40 right-10 w-72 h-72 bg-violet-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+		<div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+	</div>
+	
+	<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+			<!-- Contenido de texto -->
+			<div class="text-center lg:text-left">
+				<h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
+					<span data-i18n="hero.title1">Impulsamos tu</span> <span class="bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent" data-i18n="hero.title2">futuro</span> <span data-i18n="hero.title3">con Software a Medida</span>
+				</h1>
+				<p class="text-xl text-gray-600 mb-8 max-w-2xl" data-i18n="hero.subtitle">
+					Transformamos tus ideas en soluciones digitales escalables. Desarrollo de Apps Web, Móviles, CRMs, E-commerce y SaaS con tecnología de vanguardia.
+				</p>
+				
+				<!-- Botones de acción -->
+				<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+					<a href="#contacto" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-purple-300 transition-all hover:scale-105" data-i18n="hero.cta1">
+						Comenzar Proyecto
+					</a>
+					<a href="#proyectos" class="px-8 py-4 bg-white text-purple-600 border-2 border-purple-600 rounded-xl font-bold text-lg hover:bg-purple-50 transition-all" data-i18n="hero.cta2">
+						Ver Portafolio
+					</a>
+				</div>
+				
+				<!-- Estadísticas -->
+				<div class="mt-12 grid grid-cols-3 gap-6">
+					<div>
+						<div class="text-3xl font-bold text-purple-600">2+</div>
+						<div class="text-sm text-gray-600" data-i18n="hero.stat1">Años</div>
+					</div>
+					<div>
+						<div class="text-3xl font-bold text-purple-600">100%</div>
+						<div class="text-sm text-gray-600" data-i18n="hero.stat2">Satisfacción</div>
+					</div>
+					<div>
+						<div class="text-3xl font-bold text-purple-600">24/7</div>
+						<div class="text-sm text-gray-600" data-i18n="hero.stat3">Soporte</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Imagen/Ilustración -->
+			<div class="hidden lg:block">
+				<div class="relative">
+					<div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl blur-3xl opacity-20"></div>
+					<div class="relative bg-gradient-to-br from-purple-100 to-violet-100 rounded-2xl p-8 shadow-2xl shadow-purple-200">
+						<!-- SVG Ilustración abstracta -->
+						<svg viewBox="0 0 500 500" class="w-full h-auto">
+							<defs>
+								<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" style="stop-color:rgb(147,51,234);stop-opacity:1" />
+									<stop offset="100%" style="stop-color:rgb(124,58,237);stop-opacity:1" />
+								</linearGradient>
+							</defs>
+							<!-- Código abstracto -->
+							<rect x="50" y="80" width="120" height="30" rx="5" fill="url(#grad1)" opacity="0.8"/>
+							<rect x="50" y="130" width="200" height="30" rx="5" fill="url(#grad1)" opacity="0.6"/>
+							<rect x="50" y="180" width="150" height="30" rx="5" fill="url(#grad1)" opacity="0.7"/>
+							<rect x="280" y="80" width="170" height="30" rx="5" fill="url(#grad1)" opacity="0.5"/>
+							<rect x="280" y="130" width="140" height="30" rx="5" fill="url(#grad1)" opacity="0.8"/>
+							<rect x="280" y="180" width="120" height="30" rx="5" fill="url(#grad1)" opacity="0.6"/>
+							<!-- Círculos decorativos -->
+							<circle cx="100" cy="320" r="60" fill="url(#grad1)" opacity="0.3"/>
+							<circle cx="250" cy="280" r="80" fill="url(#grad1)" opacity="0.2"/>
+							<circle cx="380" cy="350" r="50" fill="url(#grad1)" opacity="0.4"/>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	@keyframes blob {
+		0%, 100% {
+			transform: translate(0px, 0px) scale(1);
+		}
+		33% {
+			transform: translate(30px, -50px) scale(1.1);
+		}
+		66% {
+			transform: translate(-20px, 20px) scale(0.9);
+		}
+	}
+	
+	.animate-blob {
+		animation: blob 7s infinite;
+	}
+	
+	.animation-delay-2000 {
+		animation-delay: 2s;
+	}
+	
+	.animation-delay-4000 {
+		animation-delay: 4s;
+	}
+</style>

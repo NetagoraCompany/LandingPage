@@ -1,26 +1,158 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="description" content="Netagora Landing Page" />
-		<meta name="keywords" content="Netagora, Landing Page" />
-		<meta name="author" content="Netagora" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<!-- SEO Básico -->
 		<title>Netagora</title>
+		<meta name="description" content="Netagora - Impulsamos tu futuro con Software a Medida. Desarrollo de Apps Web, Móviles, CRMs, E-commerce y SaaS." />
+		<meta name="keywords" content="desarrollo software cali, desarrollo web colombia, aplicaciones móviles, CRM personalizado, e-commerce, SaaS, desarrollo apps, programación web, software empresarial, desarrollo ágil, software development cali, web development colombia, mobile apps, custom CRM, agile development" />
+		<meta name="author" content="Netagora" />
+		<meta name="robots" content="index, follow" />
+		<meta name="language" content="Spanish, English" />
+		<link rel="canonical" href="https://www.netagora.co/" />
+		<link rel="alternate" hreflang="es" href="https://www.netagora.co/" />
+		<link rel="alternate" hreflang="en" href="https://www.netagora.co/en/" />
+		<link rel="alternate" hreflang="x-default" href="https://www.netagora.co/" />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://www.netagora.co/" />
+		<meta property="og:title" content="Netagora - Desarrollo de Software a Medida" />
+		<meta property="og:description" content="Transformamos tus ideas en soluciones digitales escalables. Desarrollo de Apps Web, Móviles, CRMs, E-commerce y SaaS." />
+		<meta property="og:image" content="https://www.netagora.co/logo.png" />
+		<meta property="og:locale" content="es_CO" />
+		<meta property="og:locale:alternate" content="en_US" />
+		<meta property="og:site_name" content="Netagora" />
+		
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content="https://www.netagora.co/" />
+		<meta property="twitter:title" content="Netagora - Desarrollo de Software a Medida" />
+		<meta property="twitter:description" content="Transformamos tus ideas en soluciones digitales escalables. Desarrollo de Apps Web, Móviles, CRMs, E-commerce y SaaS." />
+		<meta property="twitter:image" content="https://www.netagora.co/logo.png" />
+		
+		<!-- Información de Contacto -->
+		<meta name="contact" content="netagora.team@gmail.com" />
+		<meta name="geo.region" content="CO-VAC" />
+		<meta name="geo.placename" content="Cali" />
+		<meta name="geo.position" content="3.4516;-76.5320" />
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href="/logo.png" />
+		<link rel="apple-touch-icon" href="/logo.png" />
+		
+		<!-- Fuentes -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+		
+		<!-- Sistema de traducciones -->
+		<script is:inline src="/translations.js"></script>
+		
+		<!-- Schema.org JSON-LD -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"name": "Netagora",
+			"description": "Empresa de desarrollo de software a medida especializada en aplicaciones web, móviles, CRMs y SaaS",
+			"url": "https://www.netagora.co",
+			"logo": "https://www.netagora.co/logo.png",
+			"contactPoint": {
+				"@type": "ContactPoint",
+				"telephone": "+57-315-447-8029",
+				"contactType": "Customer Service",
+				"email": "netagora.team@gmail.com",
+				"availableLanguage": ["Spanish", "English"]
+			},
+			"address": {
+				"@type": "PostalAddress",
+				"addressLocality": "Cali",
+				"addressRegion": "Valle del Cauca",
+				"addressCountry": "CO"
+			},
+			"sameAs": [
+				"https://www.instagram.com/netagora.co/",
+				"https://www.linkedin.com/in/netagora-company/",
+				"https://github.com/NetagoraCompany"
+			],
+			"areaServed": {
+				"@type": "GeoCircle",
+				"geoMidpoint": {
+					"@type": "GeoCoordinates",
+					"latitude": "3.4516",
+					"longitude": "-76.5320"
+				},
+				"geoRadius": "100000"
+			},
+			"serviceType": [
+				"Desarrollo Web",
+				"Desarrollo Móvil",
+				"CRM",
+				"E-commerce",
+				"SaaS"
+			]
+		}
+		</script>
 	</head>
-	<body>
+	<body class="antialiased">
 		<slot />
+		
+		<!-- Botón flotante para volver arriba -->
+		<button id="scroll-to-top" class="fixed bottom-8 right-8 z-50 w-14 h-14 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-full shadow-lg hover:shadow-xl hover:shadow-purple-300 transition-all hover:scale-110 flex items-center justify-center opacity-0 pointer-events-none" aria-label="Volver arriba">
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+			</svg>
+		</button>
+		
+		<script>
+			// Mostrar/ocultar botón de scroll to top
+			const scrollToTopBtn = document.getElementById('scroll-to-top');
+			
+			window.addEventListener('scroll', () => {
+				const currentScrollY = window.scrollY;
+				
+				// Mostrar el botón cuando el usuario baje más de 300px
+				if (currentScrollY > 300) {
+					scrollToTopBtn?.classList.remove('opacity-0', 'pointer-events-none');
+					scrollToTopBtn?.classList.add('opacity-100', 'pointer-events-auto');
+				} else {
+					scrollToTopBtn?.classList.add('opacity-0', 'pointer-events-none');
+					scrollToTopBtn?.classList.remove('opacity-100', 'pointer-events-auto');
+				}
+			});
+			
+			// Volver arriba suavemente al hacer clic
+			scrollToTopBtn?.addEventListener('click', () => {
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			});
+		</script>
 	</body>
 </html>
 
 <style is:global>
 	@import "tailwindcss";
 	@plugin "@midudev/tailwind-animations";
+	
+	html {
+		font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+		scroll-behavior: smooth;
+	}
+	
 	html,
 	body {
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		background-color: #ffffff;
+	}
+	
+	* {
+		box-sizing: border-box;
 	}
 </style>

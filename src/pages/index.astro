@@ -26,4 +26,56 @@ import Footer from '../sections/Footer.astro';
 	<FAQ/>
 	<Contacto/>
 	<Footer/>
+	
+	<!-- Botón flotante para volver arriba -->
+	<button 
+		id="scroll-to-top" 
+		class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 opacity-0 invisible z-50 flex items-center justify-center"
+		aria-label="Volver arriba"
+	>
+		<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+		</svg>
+	</button>
 </Layout>
+
+<script>
+	const scrollToTopBtn = document.getElementById('scroll-to-top');
+	
+	// Mostrar/ocultar botón según scroll
+	window.addEventListener('scroll', () => {
+		if (window.scrollY > 300) {
+			scrollToTopBtn?.classList.remove('opacity-0', 'invisible');
+			scrollToTopBtn?.classList.add('opacity-100', 'visible');
+		} else {
+			scrollToTopBtn?.classList.remove('opacity-100', 'visible');
+			scrollToTopBtn?.classList.add('opacity-0', 'invisible');
+		}
+	});
+	
+	// Scroll suave al inicio
+	scrollToTopBtn?.addEventListener('click', () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+	});
+	
+	// Sistema de traducción global
+	window.addEventListener('languageChange', (event) => {
+		const lang = event.detail.lang;
+		
+		// Traducir todos los elementos con data-i18n
+		document.querySelectorAll('[data-i18n]').forEach(element => {
+			window.translateElement(element, lang);
+		});
+	});
+	
+	// Aplicar traducciones al cargar la página
+	document.addEventListener('DOMContentLoaded', () => {
+		const currentLang = localStorage.getItem('lang') || 'es';
+		document.querySelectorAll('[data-i18n]').forEach(element => {
+			window.translateElement(element, currentLang);
+		});
+	});
+</script>
