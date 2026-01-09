@@ -10,12 +10,11 @@
 			
 			<!-- Links de navegación -->
 			<div class="hidden md:flex items-center space-x-8">
-				<a href="#servicios" class="text-gray-700 hover:text-purple-600 transition-colors font-medium" data-i18n="nav.services">Servicios</a>
-				<a href="#proyectos" class="text-gray-700 hover:text-purple-600 transition-colors font-medium" data-i18n="nav.projects">Proyectos</a>
-				<a href="#nosotros" class="text-gray-700 hover:text-purple-600 transition-colors font-medium" data-i18n="nav.about">Nosotros</a>
-				<a href="#workflow" class="text-gray-700 hover:text-purple-600 transition-colors font-medium" data-i18n="nav.process">Proceso</a>
-				<a href="#testimonios" class="text-gray-700 hover:text-purple-600 transition-colors font-medium" data-i18n="nav.testimonials">Testimonios</a>
-				<a href="#faq" class="text-gray-700 hover:text-purple-600 transition-colors font-medium">FAQ</a>
+				<a href="#servicios" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium relative" data-section="servicios" data-i18n="nav.services">Servicios</a>
+			<a href="#proyectos" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium relative" data-section="proyectos" data-i18n="nav.projects">Proyectos</a>
+			<a href="#nosotros" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium relative" data-section="nosotros" data-i18n="nav.about">Nosotros</a>
+			<a href="#workflow" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium relative" data-section="workflow" data-i18n="nav.process">Proceso</a>
+			<a href="#faq" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium relative" data-section="faq">FAQ</a>
 			</div>
 			
 			<!-- Botón de idioma y CTA -->
@@ -51,7 +50,6 @@
 				<a href="#proyectos" class="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg" data-i18n="nav.projects">Proyectos</a>
 				<a href="#nosotros" class="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg" data-i18n="nav.about">Nosotros</a>
 				<a href="#workflow" class="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg" data-i18n="nav.process">Proceso</a>
-				<a href="#testimonios" class="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg" data-i18n="nav.testimonials">Testimonios</a>
 				<a href="#faq" class="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg">FAQ</a>
 				<a href="#contacto" class="block px-3 py-2 text-center mt-2 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-lg font-semibold" data-i18n="nav.cta">Cotizar Proyecto</a>
 			</div>
@@ -65,6 +63,34 @@
 		const menu = document.getElementById('mobile-menu');
 		menu?.classList.toggle('hidden');
 	});
+	
+	// Indicador de sección activa
+	const navLinks = document.querySelectorAll('.nav-link');
+	const sections = document.querySelectorAll('section[id]');
+	
+	function setActiveLink() {
+		let current = '';
+		sections.forEach(section => {
+			const sectionTop = section.offsetTop;
+			const sectionHeight = section.clientHeight;
+			if (window.scrollY >= sectionTop - 200) {
+				current = section.getAttribute('id') || '';
+			}
+		});
+		
+		navLinks.forEach(link => {
+			link.classList.remove('text-purple-600');
+			link.style.borderBottom = '';
+			const section = link.getAttribute('data-section');
+			if (section === current) {
+				link.classList.add('text-purple-600');
+				link.style.borderBottom = '2px solid rgb(147, 51, 234)';
+			}
+		});
+	}
+	
+	window.addEventListener('scroll', setActiveLink);
+	setActiveLink();
 	
 	// Sistema de traducción
 	let currentLang = localStorage.getItem('lang') || 'es';
