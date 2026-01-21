@@ -132,6 +132,43 @@
 					behavior: 'smooth'
 				});
 			});
+			
+			// ========== SISTEMA DE ANIMACIONES AL HACER SCROLL ==========
+			
+			// Configuración del observador
+			const observerOptions = {
+				threshold: 0.1, // El elemento debe ser 10% visible
+				rootMargin: '0px 0px -50px 0px' // Activa 50px antes de entrar al viewport
+			};
+			
+			// Crear el observador
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						// Agregar clase 'visible' cuando el elemento entra al viewport
+						entry.target.classList.add('visible');
+						// Opcional: dejar de observar después de la animación
+						observer.unobserve(entry.target);
+					}
+				});
+			}, observerOptions);
+			
+			// Observar todos los elementos con clases de animación
+			const animatedElements = document.querySelectorAll(
+				'.fade-in-up, .fade-in-left, .fade-in-right, .fade-in, .scale-in'
+			);
+			
+			animatedElements.forEach(el => observer.observe(el));
+			
+			// Animar elementos que ya están visibles al cargar
+			window.addEventListener('load', () => {
+				animatedElements.forEach(el => {
+					const rect = el.getBoundingClientRect();
+					if (rect.top < window.innerHeight && rect.bottom > 0) {
+						el.classList.add('visible');
+					}
+				});
+			});
 		</script>
 	</body>
 </html>
@@ -156,4 +193,61 @@
 	* {
 		box-sizing: border-box;
 	}
+	
+	/* ========== ANIMACIONES DE SCROLL ========== */
+	
+	/* Estado inicial: elementos ocultos */
+	.fade-in-up {
+		opacity: 0;
+		transform: translateY(50px);
+		transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+	}
+	
+	.fade-in-left {
+		opacity: 0;
+		transform: translateX(-50px);
+		transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+	}
+	
+	.fade-in-right {
+		opacity: 0;
+		transform: translateX(50px);
+		transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+	}
+	
+	.fade-in {
+		opacity: 0;
+		transition: opacity 1s ease-out;
+	}
+	
+	.scale-in {
+		opacity: 0;
+		transform: scale(0.9);
+		transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+	}
+	
+	/* Estado visible: cuando entran al viewport */
+	.fade-in-up.visible,
+	.fade-in-left.visible,
+	.fade-in-right.visible {
+		opacity: 1;
+		transform: translate(0, 0);
+	}
+	
+	.fade-in.visible {
+		opacity: 1;
+	}
+	
+	.scale-in.visible {
+		opacity: 1;
+		transform: scale(1);
+	}
+	
+	/* Delays para efectos escalonados */
+	.delay-100 { transition-delay: 0.05s; }
+	.delay-200 { transition-delay: 0.1s; }
+	.delay-300 { transition-delay: 0.15s; }
+	.delay-400 { transition-delay: 0.2s; }
+	.delay-500 { transition-delay: 0.25s; }
+	.delay-600 { transition-delay: 0.3s; }
 </style>

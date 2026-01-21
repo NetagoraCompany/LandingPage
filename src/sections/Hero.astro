@@ -9,7 +9,7 @@
 	<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 			<!-- Contenido de texto -->
-			<div class="text-center lg:text-left">
+			<div class="text-center lg:text-left fade-in-up">
 				<h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
 					<span data-i18n="hero.title1">Impulsamos tu</span> <span class="bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent" data-i18n="hero.title2">futuro</span> <span data-i18n="hero.title3">con Software a Medida</span>
 				</h1>
@@ -30,7 +30,9 @@
 				<!-- Estadísticas -->
 				<div class="mt-12 grid grid-cols-2 gap-6">
 					<div>
-						<div class="text-3xl font-bold text-purple-600">100%</div>
+						<div class="text-3xl font-bold text-purple-600">
+							<span id="satisfaction-counter">0</span>%
+						</div>
 						<div class="text-sm text-gray-600" data-i18n="hero.stat2">Satisfacción</div>
 					</div>
 					<div>
@@ -41,7 +43,7 @@
 			</div>
 			
 			<!-- Imagen/Ilustración -->
-			<div class="hidden lg:block">
+			<div class="hidden lg:block fade-in-right delay-200">
 				<div class="relative">
 					<div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl blur-3xl opacity-20"></div>
 					<div class="relative bg-gradient-to-br from-purple-100 to-violet-100 rounded-2xl p-8 shadow-2xl shadow-purple-200">
@@ -97,3 +99,45 @@
 		animation-delay: 4s;
 	}
 </style>
+
+<script>
+	// Contador animado para el porcentaje de satisfacción
+	function animateCounter() {
+		const counter = document.getElementById('satisfaction-counter');
+		if (!counter) return;
+
+		const target = 100;
+		const duration = 2000; // 2 segundos
+		const increment = target / (duration / 16); // 60fps aproximado
+		let current = 0;
+
+		const updateCounter = () => {
+			current += increment;
+			if (current < target) {
+				counter.textContent = Math.floor(current).toString();
+				requestAnimationFrame(updateCounter);
+			} else {
+				counter.textContent = target.toString();
+			}
+		};
+
+		// Iniciar la animación cuando el elemento sea visible
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					updateCounter();
+					observer.disconnect();
+				}
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(counter);
+	}
+
+	// Ejecutar cuando el DOM esté listo
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', animateCounter);
+	} else {
+		animateCounter();
+	}
+</script>
