@@ -190,77 +190,119 @@
 </section>
 
 <script>
+	import emailjs from '@emailjs/browser';
+
+	// 📌 CONFIGURACIÓN REQUERIDA - Reemplaza con tus datos de EmailJS
+	const EMAILJS_USER_ID = '3ayGB7Dz4QBk0T1pO'; // Obten en https://console.emailjs.com/admin/account
+	const EMAILJS_SERVICE_ID = 'service_ygcxtzr'; // Obten al crear el servicio de email
+	const EMAILJS_TEMPLATE_ID = 'template_w6392i2'; // Obten al crear el template
+	const CONTACT_EMAIL = 'netagora.team@gmail.com';
+
+	// Inicializar EmailJS
+	emailjs.init(EMAILJS_USER_ID);
+
 	const form = document.getElementById('contact-form') as HTMLFormElement;
 	const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-	
-	// Número de WhatsApp (formato internacional sin + ni espacios)
-	const WHATSAPP_NUMBER = '573154478029';
-	
+
 	// Textos en diferentes idiomas
 	const messages = {
 		es: {
-			sending: 'Redirigiendo a WhatsApp...',
+			sending: 'Enviando correo...',
 			submit: 'Enviar Mensaje',
-			whatsappIntro: '¡Hola! Me gustaría solicitar una cotización:',
+			success: '¡Correo enviado exitosamente!',
+			error: 'Error al enviar el correo. Por favor intenta de nuevo.',
 			name: 'Nombre',
 			email: 'Email',
 			phone: 'Teléfono',
 			service: 'Servicio',
-			message: 'Mensaje'
+			message: 'Mensaje',
+			configError: 'Error: Configura tus credenciales de EmailJS primero'
 		},
 		en: {
-			sending: 'Redirecting to WhatsApp...',
+			sending: 'Sending email...',
 			submit: 'Send Message',
-			whatsappIntro: 'Hello! I would like to request a quote:',
+			success: 'Email sent successfully!',
+			error: 'Error sending email. Please try again.',
 			name: 'Name',
 			email: 'Email',
 			phone: 'Phone',
 			service: 'Service',
-			message: 'Message'
+			message: 'Message',
+			configError: 'Error: Configure your EmailJS credentials first'
 		}
 	};
-	
+
 	// Obtener idioma actual
 	function getCurrentLang() {
 		return localStorage.getItem('lang') || 'es';
 	}
-	
-	form?.addEventListener('submit', (e) => {
+
+	form?.addEventListener('submit', async (e) => {
 		e.preventDefault();
-		
-		const lang = getCurrentLang();
-		
+
+		const lang = getCurrentLang() as 'es' | 'en';
+
+		// Validar configuración
+		if (EMAILJS_USER_ID === 'YOUR_USER_ID' || EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID' || EMAILJS_TEMPLATE_ID === 'YOUR_TEMPLATE_ID') {
+			submitBtn.textContent = messages[lang].configError;
+			submitBtn.className = 'w-full px-8 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition-all';
+			console.error('EmailJS no está configurado. Reemplaza los valores en el código.');
+			return;
+		}
+
 		// Cambiar texto del botón
 		submitBtn.disabled = true;
+		const originalText = submitBtn.textContent;
+		const originalClassName = submitBtn.className;
 		submitBtn.textContent = messages[lang].sending;
-		
+
 		// Obtener datos del formulario
 		const formData = new FormData(form);
-		const name = formData.get('name');
-		const email = formData.get('email');
-		const phone = formData.get('phone');
-		const service = formData.get('service');
-		const message = formData.get('message');
-		
-		// Construir mensaje de WhatsApp
-		let whatsappMessage = `${messages[lang].whatsappIntro}\n\n`;
-		whatsappMessage += `*${messages[lang].name}:* ${name}\n`;
-		whatsappMessage += `*${messages[lang].email}:* ${email}\n`;
-		if (phone) whatsappMessage += `*${messages[lang].phone}:* ${phone}\n`;
-		whatsappMessage += `*${messages[lang].service}:* ${service}\n\n`;
-		whatsappMessage += `*${messages[lang].message}:*\n${message}`;
-		
-		// Codificar el mensaje para URL
-		const encodedMessage = encodeURIComponent(whatsappMessage);
-		
-		// Abrir WhatsApp
-		window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
-		
-		// Resetear formulario y botón
-		setTimeout(() => {
-			form.reset();
-			submitBtn.disabled = false;
-			submitBtn.textContent = messages[lang].submit;
-		}, 1000);
+		const name = formData.get('name') as string;
+		const email = formData.get('email') as string;
+		const phone = formData.get('phone') as string;
+		const service = formData.get('service') as string;
+		const messageText = formData.get('message') as string;
+
+		try {
+			// Enviar email a través de EmailJS
+			const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+				to_email: CONTACT_EMAIL,
+				from_name: name,
+				from_email: email,
+				phone: phone || 'No proporcionado',
+				service: service,
+				message: messageText,
+				// Campos adicionales útiles
+				reply_to: email,
+				subject: `Nueva solicitud de contacto de ${name}`
+			});
+
+			if (response.status === 200) {
+				// Mostrar mensaje de éxito
+				submitBtn.textContent = messages[lang].success;
+				submitBtn.className = 'w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition-all';
+
+				// Resetear formulario
+				form.reset();
+
+				// Volver al estado normal después de 3 segundos
+				setTimeout(() => {
+					submitBtn.disabled = false;
+					submitBtn.className = originalClassName;
+					submitBtn.textContent = messages[lang].submit;
+				}, 3000);
+			}
+		} catch (error) {
+			console.error('Error al enviar email:', error);
+			submitBtn.textContent = messages[lang].error;
+			submitBtn.className = 'w-full px-8 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition-all';
+
+			setTimeout(() => {
+				submitBtn.disabled = false;
+				submitBtn.className = originalClassName;
+				submitBtn.textContent = originalText;
+			}, 3000);
+		}
 	});
 </script>
