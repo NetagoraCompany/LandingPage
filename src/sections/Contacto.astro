@@ -18,14 +18,14 @@
 				<form id="contact-form" class="space-y-6">
 					<!-- Nombre -->
 					<div>
-						<label for="name" class="block text-sm font-medium text-gray-700 mb-2" data-i18n="contact.form.name">Nombre completo</label>
+						<label for="name" class="block text-sm font-medium text-gray-700 mb-2" data-i18n="contact.form.name">Nombre</label>
 						<input 
 							type="text" 
 							id="name" 
 							name="name" 
 							required 
 							class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-							placeholder="Juan Pérez"
+							placeholder="Tu nombre"
 							data-i18n-placeholder="contact.form.name.placeholder"
 						/>
 					</div>
@@ -39,14 +39,14 @@
 							name="email" 
 							required 
 							class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-							placeholder="juan@empresa.com"
+							placeholder="tu@email.com"
 							data-i18n-placeholder="contact.form.email.placeholder"
 						/>
 					</div>
 					
 					<!-- Teléfono -->
 					<div>
-						<label for="phone" class="block text-sm font-medium text-gray-700 mb-2" data-i18n="contact.form.phone">Teléfono (opcional)</label>
+						<label for="phone" class="block text-sm font-medium text-gray-700 mb-2" data-i18n="contact.form.phone">Teléfono</label>
 						<input 
 							type="tel" 
 							id="phone" 
@@ -121,8 +121,8 @@
 					</div>
 					<div class="ml-4">
 						<h4 class="text-lg font-semibold text-gray-900 mb-1" data-i18n="contact.info.email">Email</h4>
-						<a href="mailto:netagora.team@gmail.com" class="text-purple-600 hover:text-purple-700 transition-colors">
-							netagora.team@gmail.com
+						<a href="mailto:contacto@netagora.co" class="text-purple-600 hover:text-purple-700 transition-colors">
+							contacto@netagora.co
 						</a>
 					</div>
 				</div>
@@ -190,17 +190,6 @@
 </section>
 
 <script>
-	import emailjs from '@emailjs/browser';
-
-	// 📌 CONFIGURACIÓN REQUERIDA - Reemplaza con tus datos de EmailJS
-	const EMAILJS_USER_ID = '3ayGB7Dz4QBk0T1pO'; // Obten en https://console.emailjs.com/admin/account
-	const EMAILJS_SERVICE_ID = 'service_ygcxtzr'; // Obten al crear el servicio de email
-	const EMAILJS_TEMPLATE_ID = 'template_w6392i2'; // Obten al crear el template
-	const CONTACT_EMAIL = 'netagora.team@gmail.com';
-
-	// Inicializar EmailJS
-	emailjs.init(EMAILJS_USER_ID);
-
 	const form = document.getElementById('contact-form') as HTMLFormElement;
 	const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
 
@@ -211,24 +200,12 @@
 			submit: 'Enviar Mensaje',
 			success: '¡Correo enviado exitosamente!',
 			error: 'Error al enviar el correo. Por favor intenta de nuevo.',
-			name: 'Nombre',
-			email: 'Email',
-			phone: 'Teléfono',
-			service: 'Servicio',
-			message: 'Mensaje',
-			configError: 'Error: Configura tus credenciales de EmailJS primero'
 		},
 		en: {
 			sending: 'Sending email...',
 			submit: 'Send Message',
 			success: 'Email sent successfully!',
 			error: 'Error sending email. Please try again.',
-			name: 'Name',
-			email: 'Email',
-			phone: 'Phone',
-			service: 'Service',
-			message: 'Message',
-			configError: 'Error: Configure your EmailJS credentials first'
 		}
 	};
 
@@ -242,14 +219,6 @@
 
 		const lang = getCurrentLang() as 'es' | 'en';
 
-		// Validar configuración
-		if (EMAILJS_USER_ID === 'YOUR_USER_ID' || EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID' || EMAILJS_TEMPLATE_ID === 'YOUR_TEMPLATE_ID') {
-			submitBtn.textContent = messages[lang].configError;
-			submitBtn.className = 'w-full px-8 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition-all';
-			console.error('EmailJS no está configurado. Reemplaza los valores en el código.');
-			return;
-		}
-
 		// Cambiar texto del botón
 		submitBtn.disabled = true;
 		const originalText = submitBtn.textContent;
@@ -262,23 +231,25 @@
 		const email = formData.get('email') as string;
 		const phone = formData.get('phone') as string;
 		const service = formData.get('service') as string;
-		const messageText = formData.get('message') as string;
+		const message = formData.get('message') as string;
 
 		try {
-			// Enviar email a través de EmailJS
-			const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-				to_email: CONTACT_EMAIL,
-				from_name: name,
-				from_email: email,
-				phone: phone || 'No proporcionado',
-				service: service,
-				message: messageText,
-				// Campos adicionales útiles
-				reply_to: email,
-				subject: `Nueva solicitud de contacto de ${name}`
+			// Enviar email a través del API
+			const response = await fetch('/api/send-email', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					name,
+					email,
+					phone: phone || undefined,
+					service,
+					message,
+				}),
 			});
 
-			if (response.status === 200) {
+			if (response.ok) {
 				// Mostrar mensaje de éxito
 				submitBtn.textContent = messages[lang].success;
 				submitBtn.className = 'w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition-all';
@@ -292,6 +263,8 @@
 					submitBtn.className = originalClassName;
 					submitBtn.textContent = messages[lang].submit;
 				}, 3000);
+			} else {
+				throw new Error('Error en la respuesta del servidor');
 			}
 		} catch (error) {
 			console.error('Error al enviar email:', error);
